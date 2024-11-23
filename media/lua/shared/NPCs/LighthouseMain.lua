@@ -44,11 +44,15 @@ PisqueCustomProfessions = {}
 
 PisqueCustomProfessions.DoTraits = function()
     
+    -- Declares antilonely variable and tells TraitFactory to add a new trait with the trait's name, UI from UI_EN, points, and T/F if it's a profession trait.
     local antilonely = TraitFactory.addTrait("AntiLonely", getText("UI_trait_antilonely"), 0, getText("UI_trait_antilonelydesc"), true);
     
+    -- This is to take an existing trait within the base game. We first have to create a pseudo trait and set it up to be true that it's profession only.
     TraitFactory.addTrait("PisqueNightVision", getText("UI_trait_NightVision"), 0, getText("UI_trait_NightVisionDesc"), true);
+    -- Setting mutualexclusive will make sure when PisqueNightVision is active, then NightVision will disappear from the trait list. That way, the player cannot get two NightVision.
     TraitFactory.setMutualExclusive("NightVision", "PisqueNightVision");
 
+    -- This will get the existing traitlist and update it.
     TraitFactory.sortList();
     local traitList = TraitFactory.getTraits();
     for i = 1, traitList:size() do
@@ -64,13 +68,17 @@ end
 
 PisqueCustomProfessions.DoProfessions = function()
 
+    -- This will add a new profession.
     local lighthouse = ProfessionFactory.addProfession("lighthouse",getText("UI_prof_lighthouse"), "icon_lighthouse", 2, getText("UI_profdesc_lighthouse"));
+    -- Adds Stats
     lighthouse:addXPBoost(Perks.Maintenance, 2);
     lighthouse:addXPBoost(Perks.Electricity, 2);
     lighthouse:addXPBoost(Perks.Fishing, 1);
+    -- Adds traits.
     lighthouse:addFreeTrait("PisqueNightVision");
     lighthouse:addFreeTrait("AntiLonely");
     
+    -- This will get the existing profession list and update it.
     local profList = ProfessionFactory.getProfessions();
     for i = 1, profList:size() do
         local profession = profList:get(i-1);
@@ -79,14 +87,17 @@ PisqueCustomProfessions.DoProfessions = function()
     
 end
 
--- PisqueCustomProfessions.DoNewCharacterInitializations = function(playernum, character)
+-- This will replace the PisqueNightVision, which is a placeholder, and add the already coded NightVision from the base game.
+PisqueCustomProfessions.DoNewCharacterInitializations = function(playernum, character)
 
---     if player:HasTrait("PisqueNightVision") then
--- 		player:getTraits():remove("PisqueNightVision");
--- 		player:getTraits():add("NightVision");
--- 	end
+    local player = getSpecificPlayer(playernum);
 
--- end
+    if player:HasTrait("PisqueNightVision") then
+		player:getTraits():remove("PisqueNightVision");
+		player:getTraits():add("NightVision");
+	end
+
+end
 
 -- ===============================
 -- =   Add Traits & Profession   =
@@ -94,5 +105,5 @@ end
 
 Events.OnGameBoot.Add(PisqueCustomProfessions.DoTraits);
 Events.OnGameBoot.Add(PisqueCustomProfessions.DoProfessions);
--- Events.OnCreatePlayer.Add(PisqueCustomProfessions.DoNewCharacterInitializations);
--- Events.OnCreateLivingCharacter.Add(PisqueCustomProfessions.DoProfessions);
+Events.OnCreatePlayer.Add(PisqueCustomProfessions.DoNewCharacterInitializations);
+Events.OnCreateLivingCharacter.Add(PisqueCustomProfessions.DoProfessions);
