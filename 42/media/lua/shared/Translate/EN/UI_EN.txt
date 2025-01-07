@@ -1,9 +1,0 @@
-UI_EN = {
-    -- antilonelytrait (Expected Loneliness)
-    UI_trait_antilonely = "Expected Loneliness",
-    UI_trait_antilonelydesc = "You will never get Severely Depressed.",
-    
-    -- (Lighthouse Operator)
-    UI_prof_lighthouse = "Lighthouse Operator",
-    UI_profdesc_lighthouse = "",
-}
