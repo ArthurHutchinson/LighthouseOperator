@@ -87,15 +87,22 @@ PisqueCustomProfessions.DoProfessions = function()
     
 end
 
--- This will replace the PisqueNightVision, which is a placeholder, and add the already coded NightVision from the base game.
+-- Once character is created, it will execute adding items to the player's inventory and replaces the temp trait with the real trait.
 PisqueCustomProfessions.DoNewCharacterInitializations = function(playernum, character)
 
     local player = getSpecificPlayer(playernum);
+    local inventory = player:getInventory();
 
+    -- Replaced the temporary trait that we have 'PisqueNightVision' with the actual real base game 'NightVision'
     if player:HasTrait("PisqueNightVision") then
 		player:getTraits():remove("PisqueNightVision");
 		player:getTraits():add("NightVision");
 	end
+
+    -- Gives the player a Flashlight if they are a Lighthouse Operator 'Base.HandTorch'
+    if player:getDescriptor():getProfession() == 'lighthouse' then
+        inventory:AddItem("Base.HandTorch");
+    end
 
 end
 
